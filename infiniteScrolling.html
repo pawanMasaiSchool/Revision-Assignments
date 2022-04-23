@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinite Scrolling</title>
+    <style>
+        h1{
+            margin: auto;
+            border: 2px solid red;
+            width:max-content;
+            padding: 5px;
+        }
+        #container {
+            border: 1px solid black;
+            height: 400px;
+            width: 300px;
+            margin: auto;
+            margin-top: 25px;
+            overflow: scroll;
+            overflow-x: hidden;
+        }
+        /* .card {
+            margin: auto;
+            border: 1px solid black;
+            width: 100px;
+            margin-top: 20px;
+        } */
+    </style>
+</head>
+<body>
+    <h1>Infinite Scrolling</h1>
+    <!-- <button id="btn">Add</button> -->
+    <div id="container">
+        <h4 style="border: 1px solid red; height: 50px;margin: auto;">Hello Masai 1</h4>
+        <h4 style="border: 1px solid red; height: 50px;margin: auto;">Hello Masai 2</h4>
+        <h4 style="border: 1px solid red; height: 50px;margin: auto;">Hello Masai 3</h4>
+        <h4 style="border: 1px solid red; height: 50px;margin: auto;">Hello Masai 4</h4>
+        <h4 style="border: 1px solid red; height: 50px;margin: auto;">Hello Masai 5</h4>
+        <h4 style="border: 1px solid red; height: 50px;margin: auto;">Hello Masai 6</h4>
+        <h4 style="border: 1px solid red; height: 50px;margin: auto;">Hello Masai 7</h4>
+        <h4 style="border: 1px solid red; height: 50px;margin: auto;">Hello Masai 8</h4>
+        <h4 style="border: 1px solid red; height: 50px;margin: auto;">Hello Masai 9</h4>
+        
+    </div>
+
+    <script type="text/javascript">
+        const container = document.getElementById("container");
+
+        const debouncer = (fn,delay) => {
+            let id;
+            return () => {
+                id && clearTimeout(id);
+                id = setTimeout(()=>{
+                    fn()
+                },delay)
+            }
+        }
+
+        
+        
+        let count = 10;
+        const AddingCards = () => {
+            for(let i = 0; i < 1; i++){
+                let card = document.createElement("h4");
+                card.innerHTML = `<h4>Hello Masai ${count++}</h4>`;
+                card.style.border = "1px solid red";
+                card.style.height = "50px";
+                card.style.margin = "0px"
+                container.appendChild(card)
+            }
+        }
+        
+        const Throttler = (fn,delay) => {
+            let start = Date.now();
+            return () =>{
+                let now = Date.now();
+                if(now - start > delay){
+                    start = now;
+                    fn();
+                }
+            }
+        }
+        container.addEventListener("scroll",()=>{
+            const maxScrollable = container.scrollHeight
+            let scrolled = container.scrollTop;
+            console.log(maxScrollable-scrolled);
+            if(maxScrollable - scrolled <= 400){
+                console.log("Reached End");
+                // Throttler(AddingCards,1000)
+                AddingCards()
+            }
+        })
+        
+    </script>
+</body>
+</html>
